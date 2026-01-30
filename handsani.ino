@@ -38,7 +38,6 @@ void loop(){
                 for(int ang = 90; ang >=0; ang--){
                     dis.write(ang);
                 }
-            }
             else{
                 for(int i = 0; i < 5; i++){
                     alarm();
