@@ -1,4 +1,4 @@
-#include <Servo.h>  // Capital S in Servo
+#include <Servo.h>
 Servo sprinkle;
 
 const int trig = 10;
@@ -7,24 +7,23 @@ long duration;
 int distance;
 
 void setup(){
-    sprinkle.attach(9);  // Remove 0,180 parameters - not needed
-    pinMode(trig, OUTPUT);  // TRIG is OUTPUT, not INPUT
-    pinMode(echo, INPUT);   // ECHO is INPUT, not OUTPUT
-    Serial.begin(9600);     // Capital S in Serial
+    sprinkle.attach(9);
+    pinMode(trig, OUTPUT);
+    pinMode(echo, INPUT);
+    Serial.begin(9600);
 }
 
 bool visitor(){
     digitalWrite(trig, LOW);
-    delayMicroseconds(2);  // Use delayMicroseconds, not delay
+    delayMicroseconds(2);
     digitalWrite(trig, HIGH);
-    delayMicroseconds(10);  // Use delayMicroseconds, not delay
+    delayMicroseconds(10);
     digitalWrite(trig, LOW);
 
-    duration = pulseIn(echo, HIGH);  // pulseIn (not pulseInt), and HIGH (not LOW)
+    duration = pulseIn(echo, HIGH);
     distance = (duration * 0.0343) / 2;
 
-    // Distance should be in cm, 80cm = 0.8m
-    if(distance >= 80){  // Changed from 0.8 to 80 (cm)
+    if(distance >= 80){
         return false;
     } else {
         return true;
@@ -32,30 +31,28 @@ bool visitor(){
 }
 
 void loop(){
-    delay(8UL * 60 * 60 * 1000);  // 8 hours in milliseconds (use UL for long)
+    delay(8UL * 60 * 60 * 1000);
 
     int i = 0;
     while(i < 15){
         if(visitor()){
-            delay(30000);  // 30 seconds pause, not 300ms
+            delay(30000);
         }
 
-        // 0° to 180° sweep (takes ~360 seconds with 2-second intervals)
         for (int ang = 0; ang <= 180; ang++){
             if(visitor()){
-                delay(30000);  // 30 seconds pause
+                delay(30000);
             }
             sprinkle.write(ang);
-            delay(2000);  // 2 seconds per 1° movement
+            delay(2000);
         }
 
-        // 180° to 0° sweep (return motion)
         for (int ang = 180; ang >= 0; ang--){
             if(visitor()){
-                delay(30000);  // 30 seconds pause
+                delay(30000);
             }
             sprinkle.write(ang);
-            delay(2000);  // 2 seconds per 1° movement
+            delay(2000);
         }
 
         i++;
